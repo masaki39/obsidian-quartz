@@ -20,8 +20,13 @@ jobs:
     
     - name: Update submodule to latest
       run: |
-        # サブモジュールを最新に更新
-        git submodule update --remote --merge
+        # サブモジュールを強制的に最新に更新
+        git submodule update --remote --force
+        
+        # サブモジュールディレクトリに移動して強制リセット
+        cd content
+        git reset --hard origin/main
+        cd ..
         
         # 変更があるかチェック
         if git diff --quiet --exit-code; then
