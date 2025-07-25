@@ -1,3 +1,3 @@
 [submodule "content"]
 	path = content
-	url = https://github.com/masaki39/vault-backup.git
+	url = git@github.com:masaki39/vault-backup.git
