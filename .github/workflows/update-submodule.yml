@@ -22,12 +22,7 @@ jobs:
       run: |
         # サブモジュールを強制的に最新に更新
         git submodule update --remote --force
-        
-        # サブモジュールディレクトリに移動して強制リセット
-        cd content
-        git reset --hard origin/main
-        cd ..
-        
+
         # 変更があるかチェック
         if git diff --quiet --exit-code; then
           echo "No changes to commit"
@@ -46,4 +41,3 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.PAT_TOKEN }}
-        branch: main
