@@ -36,8 +36,4 @@ jobs:
         # 変更をコミット
         git add .
         git commit -m "Auto-update submodule to latest commit"
-    
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.PAT_TOKEN }}
+        git push
