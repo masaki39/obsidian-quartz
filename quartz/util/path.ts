@@ -56,6 +56,7 @@ export function getFullSlug(window: Window): FullSlug {
 
 function sluggify(s: string): string {
   return s
+    .normalize("NFC")
     .split("/")
     .map((segment) =>
       segment
@@ -93,7 +94,7 @@ export function simplifySlug(fp: FullSlug): SimpleSlug {
 }
 
 export function transformInternalLink(link: string): RelativeURL {
-  let [fplike, anchor] = splitAnchor(decodeURI(link))
+  let [fplike, anchor] = splitAnchor(decodeURIComponent(link).normalize("NFC"))
 
   const folderPath = isFolderPath(fplike)
   let segments = fplike.split("/").filter((x) => x.length > 0)
