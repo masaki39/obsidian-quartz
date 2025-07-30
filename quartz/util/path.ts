@@ -57,14 +57,21 @@ export function getFullSlug(window: Window): FullSlug {
 function sluggify(s: string): string {
   return s
     .split("/")
-    .map((segment) =>
-      segment
+    .map((segment) => {
+      // First decode any percent-encoded characters
+      try {
+        segment = decodeURIComponent(segment)
+      } catch {
+        // If decoding fails, use the original segment
+      }
+      
+      return segment
         .replace(/\s/g, "-")
         .replace(/&/g, "-and-")
         .replace(/%/g, "-percent")
         .replace(/\?/g, "")
-        .replace(/#/g, ""),
-    )
+        .replace(/#/g, "")
+    })
     .join("/") // always use / as sep
     .replace(/\/$/, "")
 }
