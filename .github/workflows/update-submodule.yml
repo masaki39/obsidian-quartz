@@ -27,15 +27,25 @@ jobs:
         # サブモジュールを強制的に最新に更新（再帰的に）
         git submodule update --remote --force --recursive
 
-        # サブモジュールのコミットハッシュが変更されたかチェック
+        # Git設定（先に設定しておく）
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git submodule foreach --recursive git config user.email "action@github.com"
+        git submodule foreach --recursive git config user.name "GitHub Action"
+
+        # サブモジュール内のネストされたサブモジュールの変更をコミット
+        cd content
+        if ! git diff --quiet || ! git diff --cached --quiet; then
+          git add .
+          git commit -m "Auto-update nested submodules" || true
+        fi
+        cd ..
+
+        # メインリポジトリでサブモジュールのコミットハッシュが変更されたかチェック
         if git diff --quiet HEAD -- content; then
           echo "No changes to commit"
           exit 0
         fi
-
-        # Git設定
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
 
         # サブモジュールの変更をコミット
         git add content
