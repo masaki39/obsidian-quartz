@@ -20,20 +20,24 @@ jobs:
     
     - name: Update submodule to latest
       run: |
+        # サブモジュール内の未追跡ファイルと変更をクリーンアップ
+        git submodule foreach --recursive git clean -fdx
+        git submodule foreach --recursive git reset --hard
+
         # サブモジュールを強制的に最新に更新（再帰的に）
         git submodule update --remote --force --recursive
 
-        # 変更があるかチェック
-        if git diff --quiet --exit-code; then
+        # サブモジュールのコミットハッシュが変更されたかチェック
+        if git diff --quiet HEAD -- content; then
           echo "No changes to commit"
           exit 0
         fi
-        
+
         # Git設定
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        
-        # 変更をコミット
-        git add .
+
+        # サブモジュールの変更をコミット
+        git add content
         git commit -m "Auto-update submodule to latest commit"
         git push
